@@ -1,0 +1,3 @@
+blog:
+  server:
+    port: 8080
