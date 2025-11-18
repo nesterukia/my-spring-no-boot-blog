@@ -13,7 +13,6 @@ public class BlogApplication {
             AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
             appContext.register(AppConfig.class);
             Environment environment = appContext.getEnvironment();
-
             EmbeddedServer server = new EmbeddedServer(environment, appContext);
             server.start();
          } catch (Exception ex) {
