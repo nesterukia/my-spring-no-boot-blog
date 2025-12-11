@@ -1,11 +1,15 @@
 package com.nesterukia.blog.config;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 @Configuration
-@EnableWebMvc
-@ComponentScan(basePackages = "com.nesterukia.blog")
-public class AppConfig implements WebMvcConfigurer {}
+public class RestConfiguration {
+    @Bean
+    public HttpMessageConverter<Object> httpMessageConverter() {
+        return new MappingJackson2HttpMessageConverter();
+    }
+}
