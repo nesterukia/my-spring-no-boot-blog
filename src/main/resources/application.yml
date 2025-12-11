@@ -1,7 +1,7 @@
 blog:
   uploads:
     images:
-      directory: /app/storage/images
+      directory: /app/storage/images/
 spring:
   datasource:
     url:
