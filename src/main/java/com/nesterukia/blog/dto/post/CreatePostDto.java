@@ -1,4 +1,9 @@
 package com.nesterukia.blog.dto.post;
 
-public record CreatePostDto() {
-}
+import java.util.Set;
+
+public record CreatePostDto(
+        String title,
+        String text,
+        Set<String> tags
+) {}

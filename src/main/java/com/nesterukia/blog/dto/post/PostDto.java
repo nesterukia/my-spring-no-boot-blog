@@ -1,13 +1,11 @@
-package com.nesterukia.blog.dto;
+package com.nesterukia.blog.dto.post;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.nesterukia.blog.model.Post;
 import com.nesterukia.blog.model.Tag;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public record PostDto(
         Long id,
         String title,
