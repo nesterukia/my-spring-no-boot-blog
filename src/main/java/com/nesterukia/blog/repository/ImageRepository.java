@@ -1,6 +1,10 @@
 package com.nesterukia.blog.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.nesterukia.blog.model.Image;
 
-public interface FilesRepository extends JpaRepository<> {
+import java.util.Optional;
+
+public interface ImageRepository {
+    Optional<Image> findByPostId(Long postId);
+    Image save(Image image);
 }
