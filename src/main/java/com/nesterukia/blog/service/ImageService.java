@@ -1,5 +1,6 @@
 package com.nesterukia.blog.service;
 
+import com.nesterukia.blog.exceptions.EntityNotFoundException;
 import com.nesterukia.blog.model.Image;
 import com.nesterukia.blog.model.Post;
 import com.nesterukia.blog.repository.ImageRepository;
@@ -18,13 +19,13 @@ import java.nio.file.Paths;
 
 @Service
 @Slf4j
-public class FilesService {
+public class ImageService {
 
     private final ImageRepository imageRepository;
     private final PostService postService;
 
     @Autowired
-    public FilesService(ImageRepository imageRepository, PostService postService) {
+    public ImageService(ImageRepository imageRepository, PostService postService) {
         this.imageRepository = imageRepository;
         this.postService = postService;
     }
@@ -50,7 +51,11 @@ public class FilesService {
     }
 
     public Resource download(Long postId) {
-        Image image = imageRepository.findByPostId(postId);
+        Image image = imageRepository.findByPostId(postId).orElseThrow(
+                () -> new EntityNotFoundException(
+                        String.format("Image for postId = '%s' was not found.", postId)
+                )
+        );
         try {
             Path filePath = Paths.get(UPLOAD_DIR).resolve(image.getSource()).normalize();
             byte[] content = Files.readAllBytes(filePath);
