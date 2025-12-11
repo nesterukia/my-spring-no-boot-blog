@@ -8,8 +8,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,20 +28,27 @@ public class JdbcNativePostRepository extends JdbcNativeRepository implements Po
 
     @Override
     public Post save(Post post) {
-        String savePostSql = """
-            INSERT INTO posts
-            (title, "text", likes_count)
-            VALUES(?, ?, ?)
-            RETURNING id, title, "text", likes_count
-        """;
+        String savePostSql = "INSERT INTO posts (title, text, likes_count) VALUES(?, ?, ?)";
 
-        return jdbcTemplate.queryForObject(savePostSql,
-                new BeanPropertyRowMapper<>(Post.class),
-                post.getTitle(),
-                post.getText(),
-                post.getLikesCount() != null ? post.getLikesCount() : 0
-        );
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(
+                    savePostSql,
+                    Statement.RETURN_GENERATED_KEYS
+            );
+            ps.setString(1, post.getTitle());
+            ps.setString(2, post.getText());
+            ps.setLong(3, post.getLikesCount() != null ? post.getLikesCount() : 0);
+            return ps;
+        }, keyHolder);
+
+        long generatedPostId = ((Number) keyHolder.getKeys().get("id")).longValue();
+        post.setId(generatedPostId);
+        post.setComments(new HashSet<>());
+        post.setTags(new HashSet<>());
+        return post;
     }
+
 
     @Override
     public void deleteById(Long postId) {
