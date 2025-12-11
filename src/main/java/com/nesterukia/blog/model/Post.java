@@ -3,7 +3,7 @@ package com.nesterukia.blog.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -11,7 +11,7 @@ public class Post {
     Long id;
     String title;
     String text;
-    HashSet<String> tags;
     Long likesCount;
-    Long commentsCount;
+    Set<Tag> tags;
+    private Set<Comment> comments;
 }
