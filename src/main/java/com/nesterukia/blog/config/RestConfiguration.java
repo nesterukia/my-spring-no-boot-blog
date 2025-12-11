@@ -8,6 +8,4 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.nesterukia.blog")
-public class AppConfig implements WebMvcConfigurer {
-
-}
+public class AppConfig implements WebMvcConfigurer {}
