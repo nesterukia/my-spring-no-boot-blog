@@ -1,15 +1,38 @@
 services:
-  db:
-    image: 'postgres:13.1-alpine'
-    container_name: blog-db
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=blog-db
+  spring-backend:
+    container_name: blog-backend
+    build: .
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    depends_on:
+      - postgres-db
+    networks:
+      - blog-network
     volumes:
-      - ./db_init:/docker-entrypoint-initdb.d/
+      - image-storage:/app/storage/images
+
+  postgres-db:
+    image: 'postgres:13.1-alpine'
+    container_name: blog-database
+    environment:
+      - POSTGRES_USER=
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=
+    volumes:
+      - ./db/postgre/db_init:/docker-entrypoint-initdb.d/
       - postgres-data:/var/lib/postgres/data
     ports:
       - "5432:5432"
+    networks:
+      - blog-network
+
 volumes:
+  image-storage:
+    name: "blog-image-storage"
   postgres-data:
+    name: "blog-database"
+
+networks:
+  blog-network:
+    driver: bridge

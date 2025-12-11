@@ -1,8 +1,9 @@
 blog:
-  server:
-    port: 8080
-  db:
-    url: jdbc:postgresql://localhost:5432/blog-db
-    username: postgres
-    password: postgres
-    driver: org.postgresql.Driver
+  uploads:
+    images:
+      directory: /app/storage/images
+spring:
+  datasource:
+    url:
+    username:
+    password:
