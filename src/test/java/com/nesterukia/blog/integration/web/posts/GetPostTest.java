@@ -1,7 +1,6 @@
-package com.nesterukia.blog.integration.posts;
+package com.nesterukia.blog.integration.web.posts;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nesterukia.blog.integration.BaseIntegrationTest;
+import com.nesterukia.blog.integration.web.BaseWebIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -9,13 +8,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class GetPostTest extends BaseIntegrationTest {
+public class GetPostTest extends BaseWebIntegrationTest {
 
     @Test
     void getAllPostsWithSearchIsOk() throws Exception {
-        insertPost("Post 1 with search", "Unique text 1");
-        insertPost("Post 2 with search", "Unique text 2");
-        insertPost("Other post", "Text 3");
+        createPostAndGetId("Post 1 with search", "Unique text 1");
+        createPostAndGetId("Post 2 with search", "Unique text 2");
+        createPostAndGetId("Other post", "Text 3");
 
         String request = POSTS_URI + "?search=Unique&pageNumber=1&pageSize=10";
 
@@ -35,7 +34,7 @@ public class GetPostTest extends BaseIntegrationTest {
     @Test
     void getAllPostsPaginationIsOk() throws Exception {
         for (int i = 1; i <= 15; i++) {
-            insertPost("Post " + i, "Text " + i);
+            createPostAndGetId("Post " + i, "Text " + i);
         }
 
         String request = POSTS_URI + "?search=&pageNumber=2&pageSize=5";
@@ -87,20 +86,5 @@ public class GetPostTest extends BaseIntegrationTest {
         String getRequest = String.format(SINGLE_POST_URI, 999L);
 
         mockMvc.perform(get(getRequest)).andExpect(status().isNotFound());
-    }
-
-    private void insertPost(String title, String text) throws Exception {
-        String createPostJson = String.format("""
-        {
-          "title": "%s",
-          "text": "%s",
-          "tags": []
-        }
-        """, title, text);
-
-        var createPostRequest = MockMvcRequestBuilders.post(POSTS_URI)
-                .content(createPostJson)
-                .contentType(MediaType.APPLICATION_JSON);
-        mockMvc.perform(createPostRequest);
     }
 }

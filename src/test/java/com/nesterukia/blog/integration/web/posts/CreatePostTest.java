@@ -1,6 +1,6 @@
-package com.nesterukia.blog.integration.posts;
+package com.nesterukia.blog.integration.web.posts;
 
-import com.nesterukia.blog.integration.BaseIntegrationTest;
+import com.nesterukia.blog.integration.web.BaseWebIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class CreatePostTest extends BaseIntegrationTest {
+public class CreatePostTest extends BaseWebIntegrationTest {
 
     @Test
     void createPostEmptyTagsIsOk() throws Exception {

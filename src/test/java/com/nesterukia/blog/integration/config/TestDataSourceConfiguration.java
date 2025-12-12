@@ -41,7 +41,7 @@ public class TestDataSourceConfiguration {
         DataSource dataSource = event.getApplicationContext().getBean(DataSource.class);
 
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(new ClassPathResource("schema.sql"));
+        populator.addScript(new ClassPathResource("./db/postgre/db_init/01_create_tables.sql"));
         populator.execute(dataSource);
     }
 }

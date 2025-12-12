@@ -1,8 +1,8 @@
-package com.nesterukia.blog.integration.posts;
+package com.nesterukia.blog.integration.web.posts;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nesterukia.blog.integration.BaseIntegrationTest;
+import com.nesterukia.blog.integration.web.BaseWebIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class DeletePostTest extends BaseIntegrationTest {
+public class DeletePostTest extends BaseWebIntegrationTest {
 
     @Test
     public void deleteExistingPostIsOk() throws Exception {

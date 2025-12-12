@@ -1,6 +1,6 @@
-package com.nesterukia.blog.integration.posts;
+package com.nesterukia.blog.integration.web.posts;
 
-import com.nesterukia.blog.integration.BaseIntegrationTest;
+import com.nesterukia.blog.integration.web.BaseWebIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class LikePostTest extends BaseIntegrationTest {
+public class LikePostTest extends BaseWebIntegrationTest {
 
     @Test
     void incrementLikesCountIsOk() throws Exception {
