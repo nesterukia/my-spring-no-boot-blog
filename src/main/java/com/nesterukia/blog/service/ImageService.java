@@ -37,11 +37,12 @@ public class ImageService {
     public void upload(Long postId, MultipartFile file) {
         try {
             Path uploadDir = Paths.get(UPLOAD_DIR);
-            Path filePath = uploadDir.resolve(buildImageFilenameByPostId(postId, file));
+            String filename = buildImageFilenameByPostId(postId, file);
+            Path filePath = uploadDir.resolve(filename);
             file.transferTo(filePath);
             Post postOfImage = postService.getPostById(postId);
             imageRepository.save(
-                    new Image(filePath.toString(), postOfImage.getId())
+                    new Image(filename, postOfImage.getId())
             );
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);

@@ -13,6 +13,9 @@ import com.nesterukia.blog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -82,9 +85,19 @@ public class PostController {
     }
 
     @GetMapping("/{postId}/image")
-    public byte[] getImage(@PathVariable(name = "postId") Long postId) throws IOException {
+    public ResponseEntity<byte[]> getImage(@PathVariable(name = "postId") Long postId) throws IOException {
         Resource resource = imageService.download(postId);
-        return resource.getContentAsByteArray();
+        byte[] imageBytes = resource.getContentAsByteArray();
+
+        MediaType mediaType = MediaTypeFactory
+                .getMediaType(resource.getFilename())
+                .orElse(MediaType.IMAGE_JPEG);
+
+        return ResponseEntity
+                .ok()
+                .contentType(mediaType)
+                .contentLength(imageBytes.length)
+                .body(imageBytes);
     }
 
     @PostMapping("/{postId}/likes")
