@@ -37,6 +37,7 @@ public class ImageService {
     public void upload(Long postId, MultipartFile file) {
         try {
             Path uploadDir = Paths.get(UPLOAD_DIR);
+            Files.createDirectories(uploadDir);
             String filename = buildImageFilenameByPostId(postId, file);
             Path filePath = uploadDir.resolve(filename);
             file.transferTo(filePath);
@@ -57,11 +58,17 @@ public class ImageService {
         );
         try {
             Path filePath = Paths.get(UPLOAD_DIR).resolve(image.getSource()).normalize();
-            byte[] content = Files.readAllBytes(filePath);
 
+            if (!Files.exists(filePath)) {
+                throw new EntityNotFoundException(
+                        String.format("Image file not found at path: %s", filePath)
+                );
+            }
+
+            byte[] content = Files.readAllBytes(filePath);
             return new ByteArrayResource(content);
         } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new EntityNotFoundException("Failed to read image file: " + e.getMessage());
         }
     }
 
