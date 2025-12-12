@@ -1,5 +1,6 @@
 package com.nesterukia.blog.repository.implementations.jdbcNative;
 
+import com.nesterukia.blog.exceptions.EntityNotFoundException;
 import com.nesterukia.blog.model.Post;
 import com.nesterukia.blog.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,29 +50,52 @@ public class JdbcNativePostRepository extends JdbcNativeRepository implements Po
         return post;
     }
 
+    @Override
+    public Post update(Long postId, Post post) {
+        String updateSql = "UPDATE posts " +
+                           "SET title = ?, text = ? " +
+                           "WHERE id = ?";
+
+        int rowsAffected = jdbcTemplate.update(
+                updateSql,
+                post.getTitle(),
+                post.getText(),
+                postId
+        );
+
+        if (rowsAffected == 0) {
+            throw new EntityNotFoundException(
+                    String.format("Post with id = '%d' was not found.", postId)
+            );
+        }
+
+        post.setId(postId);
+        return post;
+    }
+
 
     @Override
     public void deleteById(Long postId) {
-        jdbcTemplate.update("DELETE FROM posts WHERE id = ?", postId);
+        int rowsAffected = jdbcTemplate.update("DELETE FROM posts WHERE id = ?", postId);
+
+        if (rowsAffected == 0) {
+            throw new EntityNotFoundException(
+                    String.format("Post with id = '%d' was not found", postId)
+            );
+        }
     }
 
     @Override
     public Page<Post> findAllByTextContainsIgnoreCase(String searchString, Pageable pageable) {
-        String countSql = """
-               SELECT COUNT(*)
-               FROM posts
-               WHERE LOWER(text) LIKE LOWER(?);
-        """;
+        String countSql = "SELECT COUNT(*) FROM posts WHERE LOWER(text) LIKE LOWER(?);";
         Long total = jdbcTemplate.queryForObject(countSql, Long.class, "%" + searchString + "%");
 
-        String sql = """
-                SELECT id, title, text, likes_count
-                FROM posts
-                WHERE LOWER(text) LIKE LOWER(?)
-                ORDER BY id
-                LIMIT ?
-                OFFSET ?;
-        """;
+        String sql = "SELECT id, title, text, likes_count " +
+                     "FROM posts " +
+                     "WHERE LOWER(text) LIKE LOWER(?) " +
+                     "ORDER BY id " +
+                     "LIMIT ? " +
+                     "OFFSET ?;";
         List<Post> posts = jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(Post.class),
@@ -91,14 +115,19 @@ public class JdbcNativePostRepository extends JdbcNativeRepository implements Po
 
     @Override
     public Integer incrementAndGetLikesCount(Long postId) {
-        String sql = """
-            UPDATE posts
-            SET likes_count = likes_count + 1
-            WHERE id = ?
-            RETURNING likes_count
-        """;
+        String updateSql = "UPDATE posts " +
+                           "SET likes_count = likes_count + 1 " +
+                           "WHERE id = ?";
 
-        return jdbcTemplate.queryForObject(sql, Integer.class, postId);
+        int rowsAffected = jdbcTemplate.update(updateSql, postId);
+
+        if (rowsAffected == 0) {
+            throw new EntityNotFoundException(
+                    String.format("Post with id = '%d' was not found", postId)
+            );
+        }
+
+        String selectSql = "SELECT likes_count FROM posts WHERE id = ?";
+        return jdbcTemplate.queryForObject(selectSql, Integer.class, postId);
     }
-
 }

@@ -1,5 +1,6 @@
 package com.nesterukia.blog.integration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nesterukia.blog.WebConfiguration;
 import com.nesterukia.blog.integration.config.TestDataSourceConfiguration;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +27,8 @@ public abstract class BaseIntegrationTest {
 
     protected MockMvc mockMvc;
 
+    protected ObjectMapper objectMapper = new ObjectMapper();
+
     protected static final String POSTS_URI = "/api/posts";
     protected static final String SINGLE_POST_URI = "/api/posts/%d";
     protected static final String COMMENTS_URI = "/api/posts/%d/comments";
@@ -37,11 +40,12 @@ public abstract class BaseIntegrationTest {
     protected void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
 
-        jdbcTemplate.execute("DELETE FROM posts");
-        jdbcTemplate.execute("DELETE FROM post_tags");
-        jdbcTemplate.execute("DELETE FROM tags");
-        jdbcTemplate.execute("DELETE FROM comments");
-        jdbcTemplate.execute("DELETE FROM images");
+        jdbcTemplate.execute("""
+            DELETE FROM comments;
+            DELETE FROM images;
+            DELETE FROM post_tags;
+            DELETE FROM posts;
+            DELETE FROM tags;
+        """);
     }
-
 }

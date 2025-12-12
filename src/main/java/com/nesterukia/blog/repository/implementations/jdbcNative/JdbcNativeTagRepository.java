@@ -7,8 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,12 +28,22 @@ public class JdbcNativeTagRepository extends JdbcNativeRepository implements Tag
 
     @Override
     public Tag save(String title) {
-        Long tagId = jdbcTemplate.queryForObject(
-                "INSERT INTO tags(title) VALUES (?) RETURNING id", Long.class, title
-        );
+        String saveSql = "INSERT INTO tags(title) VALUES (?)";
 
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(
+                    saveSql,
+                    Statement.RETURN_GENERATED_KEYS
+            );
+            ps.setString(1, title);
+            return ps;
+        }, keyHolder);
+
+        long tagId = ((Number) keyHolder.getKeys().get("id")).longValue();
         return new Tag(tagId, title);
     }
+
 
     @Override
     public Set<Tag> saveTags(Long postId, Set<String> tagTitles) {

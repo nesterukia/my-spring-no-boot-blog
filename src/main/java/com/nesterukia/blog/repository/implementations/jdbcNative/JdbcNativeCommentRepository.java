@@ -57,11 +57,7 @@ public class JdbcNativeCommentRepository extends JdbcNativeRepository implements
 
     @Override
     public Set<Comment> findAllByPostId(Long postId) {
-        String sql = """
-            SELECT id, "text", post_id
-            FROM comments
-            WHERE post_id = ?
-        """;
+        String sql = "SELECT id, text, post_id FROM comments WHERE post_id = ?";
         List<Comment> comments = jdbcTemplate.query(
                 sql,
                 new BeanPropertyRowMapper<>(Comment.class),
@@ -85,11 +81,7 @@ public class JdbcNativeCommentRepository extends JdbcNativeRepository implements
     private Comment insertAndGetComment(Long postId, String text) {
         Long nextId = getNextCommentIdForPost(postId);
 
-        String sql = """
-            INSERT INTO comments(id, text, post_id)
-            VALUES (?, ?, ?)
-            RETURNING id, "text", post_id
-        """;
+        String sql = "INSERT INTO comments(id, text, post_id) VALUES (?, ?, ?) RETURNING id, text, post_id";
         return jdbcTemplate.queryForObject(
                 sql,
                 new BeanPropertyRowMapper<>(Comment.class),

@@ -6,6 +6,7 @@ import com.nesterukia.blog.dto.post.PostDto;
 import com.nesterukia.blog.dto.post.CreatePostDto;
 import com.nesterukia.blog.dto.post.PostPageResponse;
 import com.nesterukia.blog.dto.post.UpdatePostDto;
+import com.nesterukia.blog.exceptions.EntityNotFoundException;
 import com.nesterukia.blog.service.CommentService;
 import com.nesterukia.blog.service.ImageService;
 import com.nesterukia.blog.service.PostService;
@@ -85,18 +86,9 @@ public class PostController {
     }
 
     @GetMapping("/{postId}/image")
-    public ResponseEntity<byte[]> getImage(@PathVariable(name = "postId") Long postId) {
-        try {
-            Resource resource = imageService.download(postId);
-            byte[] content = resource.getContentAsByteArray();
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                    .body(content);
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Image not found", e);
-        }
+    public byte[] getImage(@PathVariable(name = "postId") Long postId) throws IOException {
+        Resource resource = imageService.download(postId);
+        return resource.getContentAsByteArray();
     }
 
     @PostMapping("/{postId}/likes")
@@ -126,6 +118,7 @@ public class PostController {
     public CommentDto updateComment(@PathVariable(name = "postId") Long postId,
                                     @PathVariable(name = "commentId") Long commentId,
                                     @RequestBody CommentDto commentDto) {
+        commentDto.validateMandatoryFields();
         return CommentDto.fromComment(commentService.updateComment(postId, commentId, commentDto.text()));
     }
 

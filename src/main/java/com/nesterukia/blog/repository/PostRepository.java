@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface PostRepository {
     Post save(Post post);
+    Post update(Long postId, Post post);
     void deleteById(Long postId);
     Page<Post> findAllByTextContainsIgnoreCase(String searchString, Pageable pageable);
     Optional<Post> findById(Long postId);

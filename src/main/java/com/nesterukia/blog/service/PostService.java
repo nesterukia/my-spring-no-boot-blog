@@ -5,6 +5,7 @@ import com.nesterukia.blog.dto.post.PostDto;
 import com.nesterukia.blog.dto.post.PostPageResponse;
 import com.nesterukia.blog.dto.post.UpdatePostDto;
 import com.nesterukia.blog.exceptions.EntityNotFoundException;
+import com.nesterukia.blog.exceptions.MandatoryFieldAbsentException;
 import com.nesterukia.blog.model.Comment;
 import com.nesterukia.blog.model.Post;
 import com.nesterukia.blog.model.Tag;
@@ -71,6 +72,8 @@ public class PostService {
 
     @Transactional
     public Post savePost(CreatePostDto createPostDto) {
+        createPostDto.validateMandatoryFields();
+
         Post post = postRepository.save(fromDto(createPostDto));
         Set<Tag> tags = tagRepository.saveTags(post.getId(), createPostDto.tags());
         postTagRepository.batchInsertPostTags(post.getId(), tags);
@@ -79,12 +82,14 @@ public class PostService {
     }
 
     public Post updatePost(Long postId, UpdatePostDto updatePostDto) {
-        Post updatedPost = postRepository.save(fromDto(postId, updatePostDto));
+        updatePostDto.validateMandatoryFields();
+
+        Post updatedPost = postRepository.update(postId, fromDto(postId, updatePostDto));
         postTagRepository.deleteByPostId(postId);
         Set<Tag> tags = tagRepository.saveTags(postId, updatePostDto.tags());
         postTagRepository.batchInsertPostTags(postId, tags);
         updatedPost.setTags(tags);
-        return postRepository.save(fromDto(postId, updatePostDto));
+        return updatedPost;
     }
 
     public void deletePostById(Long id) {

@@ -19,6 +19,7 @@ public class CommentService {
     }
 
     public Comment save(CreateCommentDto createCommentDto) {
+        createCommentDto.validateMandatoryFields();
         return commentRepository.save(Comment.fromCreateCommentDto(createCommentDto));
     }
 
