@@ -4,7 +4,6 @@ import com.nesterukia.blog.integration.config.TestDataSourceConfiguration;
 import com.nesterukia.blog.model.Image;
 import com.nesterukia.blog.repository.ImageRepository;
 import com.nesterukia.blog.repository.implementations.jdbcNative.JdbcNativeImageRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
