@@ -1,6 +1,6 @@
 package com.nesterukia.blog.dto.comment;
 
-import com.nesterukia.blog.exceptions.MandatoryFieldAbsentException;
+import com.nesterukia.blog.exceptions.MandatoryParameterAbsentException;
 import com.nesterukia.blog.model.Comment;
 
 public record CommentDto(
@@ -18,15 +18,15 @@ public record CommentDto(
 
     public void validateMandatoryFields() {
         if (this.id == null) {
-            throw new MandatoryFieldAbsentException("id");
+            throw new MandatoryParameterAbsentException("id");
         }
 
         if (this.text == null) {
-            throw new MandatoryFieldAbsentException("text");
+            throw new MandatoryParameterAbsentException("text");
         }
 
         if (this.postId == null) {
-            throw new MandatoryFieldAbsentException("postId");
+            throw new MandatoryParameterAbsentException("postId");
         }
     }
 }

@@ -66,12 +66,10 @@ public class JdbcNativeTagRepository extends JdbcNativeRepository implements Tag
 
     @Override
     public Set<Tag> findTagsByPostId(Long postId) {
-        String findTagsQuery = """
-            SELECT t.id, t.title
-            FROM tags t
-            JOIN post_tags pt ON t.id = pt.tag_id
-            WHERE pt.post_id = ?
-        """;
+        String findTagsQuery = "SELECT t.id, t.title " +
+                               "FROM tags t " +
+                               "JOIN post_tags pt ON t.id = pt.tag_id " +
+                               "WHERE pt.post_id = ?";
 
         List<Tag> tags = jdbcTemplate.query(
                 findTagsQuery,

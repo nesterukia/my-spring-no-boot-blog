@@ -1,6 +1,6 @@
 package com.nesterukia.blog.dto.comment;
 
-import com.nesterukia.blog.exceptions.MandatoryFieldAbsentException;
+import com.nesterukia.blog.exceptions.MandatoryParameterAbsentException;
 
 public record CreateCommentDto(
         String text,
@@ -8,11 +8,11 @@ public record CreateCommentDto(
 ) {
     public void validateMandatoryFields() {
         if (this.text == null) {
-            throw new MandatoryFieldAbsentException("text");
+            throw new MandatoryParameterAbsentException("text");
         }
 
         if (this.postId == null) {
-            throw new MandatoryFieldAbsentException("postId");
+            throw new MandatoryParameterAbsentException("postId");
         }
     }
 }

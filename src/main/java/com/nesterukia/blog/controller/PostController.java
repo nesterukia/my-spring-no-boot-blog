@@ -6,16 +6,13 @@ import com.nesterukia.blog.dto.post.PostDto;
 import com.nesterukia.blog.dto.post.CreatePostDto;
 import com.nesterukia.blog.dto.post.PostPageResponse;
 import com.nesterukia.blog.dto.post.UpdatePostDto;
-import com.nesterukia.blog.exceptions.EntityNotFoundException;
+import com.nesterukia.blog.exceptions.MandatoryParameterAbsentException;
 import com.nesterukia.blog.service.CommentService;
 import com.nesterukia.blog.service.ImageService;
 import com.nesterukia.blog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.Set;
@@ -80,7 +76,7 @@ public class PostController {
     @PutMapping("/{postId}/image")
     public void updateImage(@PathVariable(name = "postId") Long postId, @RequestParam("image") MultipartFile image) {
         if (image.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Image file is empty");
+            throw new MandatoryParameterAbsentException("image file");
         }
         imageService.upload(postId, image);
     }

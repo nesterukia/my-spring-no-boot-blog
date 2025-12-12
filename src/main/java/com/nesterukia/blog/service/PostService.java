@@ -5,7 +5,6 @@ import com.nesterukia.blog.dto.post.PostDto;
 import com.nesterukia.blog.dto.post.PostPageResponse;
 import com.nesterukia.blog.dto.post.UpdatePostDto;
 import com.nesterukia.blog.exceptions.EntityNotFoundException;
-import com.nesterukia.blog.exceptions.MandatoryFieldAbsentException;
 import com.nesterukia.blog.model.Comment;
 import com.nesterukia.blog.model.Post;
 import com.nesterukia.blog.model.Tag;

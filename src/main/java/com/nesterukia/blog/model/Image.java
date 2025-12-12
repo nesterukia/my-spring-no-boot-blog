@@ -12,10 +12,10 @@ import lombok.Setter;
 public class Image {
     Long id;
     String source;
-    Post post;
+    Long postId;
 
-    public Image(String source, Post post) {
+    public Image(String source, Long postId) {
         this.source = source;
-        this.post = post;
+        this.postId = postId;
     }
 }

@@ -39,11 +39,9 @@ public class ImageService {
             Path uploadDir = Paths.get(UPLOAD_DIR);
             Path filePath = uploadDir.resolve(buildImageFilenameByPostId(postId, file));
             file.transferTo(filePath);
-            log.debug("I WAS HERE 1");
             Post postOfImage = postService.getPostById(postId);
-            log.debug("I WAS HERE 2");
             imageRepository.save(
-                    new Image(filePath.toString(), postOfImage)
+                    new Image(filePath.toString(), postOfImage.getId())
             );
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
