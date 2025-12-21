@@ -1,0 +1,9 @@
+blog:
+  uploads:
+    images:
+      directory: /app/storage/images/
+spring:
+  datasource:
+    url:
+    username:
+    password:
