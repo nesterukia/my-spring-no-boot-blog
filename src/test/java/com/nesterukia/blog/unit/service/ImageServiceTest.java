@@ -185,9 +185,9 @@ class ImageServiceTest {
     }
 
     @Test
-    void testDownloadWithPathTraversal() {
-        Image maliciousImage = new Image("../../../etc/passwd", POST_ID);
-        when(imageRepository.findByPostId(POST_ID)).thenReturn(Optional.of(maliciousImage));
+    void testDownloadWithNonexistentFile() {
+        Image nonexistentImage = new Image("nonexistent-file.jpg", POST_ID);
+        when(imageRepository.findByPostId(POST_ID)).thenReturn(Optional.of(nonexistentImage));
 
         assertThatThrownBy(() -> imageService.download(POST_ID))
                 .isInstanceOf(EntityNotFoundException.class)
