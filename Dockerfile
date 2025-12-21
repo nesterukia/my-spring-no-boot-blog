@@ -4,7 +4,8 @@ COPY . .
 RUN chmod +x gradlew
 RUN ./gradlew clean build -x test --no-daemon
 
-FROM tomcat:jre21
-COPY --from=build /app/build/libs/*.war /usr/local/tomcat/webapps/ROOT.war
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=build /app/build/libs/*.jar application.jar
 EXPOSE 8080
-CMD ["catalina.sh", "run"]
+ENTRYPOINT ["java", "-jar", "application.jar"]

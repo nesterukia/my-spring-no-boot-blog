@@ -7,3 +7,10 @@ spring:
     url: jdbc:postgresql://postgres-db:5432/blog_db
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+
+logging:
+  level:
+    root: INFO
+server:
+  port:
+    8080

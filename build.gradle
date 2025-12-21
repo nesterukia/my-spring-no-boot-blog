@@ -1,6 +1,7 @@
 plugins {
     id 'java'
-    id 'war'
+    id 'org.springframework.boot' version '4.0.0'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.nesterukia'
@@ -8,8 +9,15 @@ version = '1.0-SNAPSHOT'
 description = 'my-blog-backend'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
@@ -17,50 +25,23 @@ repositories {
 }
 
 dependencies {
-    // Spring Framework
-    implementation 'org.springframework:spring-context:6.2.12'
-    implementation 'org.springframework:spring-core:6.2.12'
-    implementation 'org.springframework:spring-web:6.2.12'
-    implementation 'org.springframework:spring-webmvc:6.2.12'
-
-    // Spring Data
-    implementation 'org.springframework.data:spring-data-jdbc:3.5.6'
+    // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // Database
     implementation 'org.postgresql:postgresql:42.7.8'
-
-    // JSON
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.20.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.20.1'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.20.1'
-
-    // Logging
-    implementation 'ch.qos.logback:logback-classic:1.5.20'
-
-    // Servlet
-    providedRuntime 'jakarta.servlet:jakarta.servlet-api:6.1.0'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.42'
     annotationProcessor 'org.projectlombok:lombok:1.18.42'
 
     // Testing
-    testImplementation 'org.springframework:spring-test:6.2.12'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:6.0.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:6.0.1'
-    testImplementation 'com.h2database:h2:2.4.240'
-    testImplementation 'org.mockito:mockito-core:5.21.0'
-    testImplementation 'org.hamcrest:hamcrest:3.0'
-    testImplementation 'com.jayway.jsonpath:json-path:2.10.0'
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-tasks.withType(Javadoc) {
-    options.encoding = 'UTF-8'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.h2database:h2'
+    testImplementation 'com.fasterxml.jackson.core:jackson-core:2.20.1'
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.20.1'
 }
 
 tasks.named('test') {
