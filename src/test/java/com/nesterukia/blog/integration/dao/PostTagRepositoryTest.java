@@ -1,6 +1,5 @@
 package com.nesterukia.blog.integration.dao;
 
-import com.nesterukia.blog.integration.config.TestDataSourceConfiguration;
 import com.nesterukia.blog.model.Tag;
 import com.nesterukia.blog.repository.PostTagRepository;
 import com.nesterukia.blog.repository.implementations.jdbcNative.JdbcNativePostTagRepository;
@@ -16,10 +15,6 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringJUnitConfig(classes = {
-        TestDataSourceConfiguration.class,
-        JdbcNativePostTagRepository.class
-})
 public class PostTagRepositoryTest extends BaseDaoIntegrationTest {
     @Autowired
     private PostTagRepository postTagRepository;

@@ -1,12 +1,9 @@
 package com.nesterukia.blog.integration.dao;
 
-import com.nesterukia.blog.integration.config.TestDataSourceConfiguration;
 import com.nesterukia.blog.model.Tag;
 import com.nesterukia.blog.repository.TagRepository;
-import com.nesterukia.blog.repository.implementations.jdbcNative.JdbcNativeTagRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,10 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.util.AssertionErrors.assertNotEquals;
 
-@SpringJUnitConfig(classes = {
-        TestDataSourceConfiguration.class,
-        JdbcNativeTagRepository.class
-})
 public class TagRepositoryTest extends BaseDaoIntegrationTest {
     @Autowired
     private TagRepository tagRepository;
