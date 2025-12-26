@@ -1,15 +1,12 @@
 package com.nesterukia.blog.integration.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nesterukia.blog.WebConfiguration;
-import com.nesterukia.blog.integration.config.TestDataSourceConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -17,11 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringJUnitConfig(classes = {
-        TestDataSourceConfiguration.class,
-        WebConfiguration.class
-})
-@WebAppConfiguration
+@SpringBootTest
 @TestPropertySource(locations = "classpath:test-application.properties")
 public abstract class BaseWebIntegrationTest {
     @Autowired

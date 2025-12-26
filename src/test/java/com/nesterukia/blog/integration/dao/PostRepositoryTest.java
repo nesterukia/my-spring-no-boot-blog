@@ -1,27 +1,20 @@
 package com.nesterukia.blog.integration.dao;
 
 import com.nesterukia.blog.exceptions.EntityNotFoundException;
-import com.nesterukia.blog.integration.config.TestDataSourceConfiguration;
 import com.nesterukia.blog.model.Post;
 import com.nesterukia.blog.repository.PostRepository;
-import com.nesterukia.blog.repository.implementations.jdbcNative.JdbcNativePostRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
-@SpringJUnitConfig(classes = {
-        TestDataSourceConfiguration.class,
-        JdbcNativePostRepository.class
-})
 public class PostRepositoryTest extends BaseDaoIntegrationTest {
     @Autowired
     private PostRepository postRepository;

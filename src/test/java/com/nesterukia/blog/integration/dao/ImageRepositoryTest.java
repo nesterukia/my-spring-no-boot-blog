@@ -1,14 +1,11 @@
 package com.nesterukia.blog.integration.dao;
 
-import com.nesterukia.blog.integration.config.TestDataSourceConfiguration;
 import com.nesterukia.blog.model.Image;
 import com.nesterukia.blog.repository.ImageRepository;
-import com.nesterukia.blog.repository.implementations.jdbcNative.JdbcNativeImageRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.Optional;
 
@@ -17,10 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
-@SpringJUnitConfig(classes = {
-        TestDataSourceConfiguration.class,
-        JdbcNativeImageRepository.class
-})
+
 public class ImageRepositoryTest extends BaseDaoIntegrationTest {
     @Autowired
     private ImageRepository imageRepository;

@@ -11,6 +11,9 @@ services:
       - blog-network
     volumes:
       - image-storage:/app/storage/images
+    environment:
+      - DB_USER=
+      - DB_PASSWORD=
 
   postgres-db:
     image: 'postgres:13.1-alpine'
@@ -18,7 +21,7 @@ services:
     environment:
       - POSTGRES_USER=
       - POSTGRES_PASSWORD=
-      - POSTGRES_DB=
+      - POSTGRES_DB=blog_db
     volumes:
       - ./src/main/resources/db/postgre/db_init:/docker-entrypoint-initdb.d/
       - postgres-data:/var/lib/postgres/data

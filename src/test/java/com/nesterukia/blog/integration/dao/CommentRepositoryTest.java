@@ -1,14 +1,11 @@
 package com.nesterukia.blog.integration.dao;
 
 import com.nesterukia.blog.exceptions.EntityNotFoundException;
-import com.nesterukia.blog.integration.config.TestDataSourceConfiguration;
 import com.nesterukia.blog.model.Comment;
 import com.nesterukia.blog.repository.CommentRepository;
-import com.nesterukia.blog.repository.implementations.jdbcNative.JdbcNativeCommentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.Optional;
 import java.util.Set;
@@ -16,10 +13,6 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringJUnitConfig(classes = {
-        TestDataSourceConfiguration.class,
-        JdbcNativeCommentRepository.class
-})
 public class CommentRepositoryTest extends BaseDaoIntegrationTest{
 
     @Autowired

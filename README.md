@@ -1,6 +1,6 @@
-# Бэкенд приложения-блога с использованием Spring Framework
+# Бэкенд приложения-блога с использованием Spring Boot
 
-Полнофункциональное REST API приложение для управления блогом, написанное на Java с использованием Spring Framework.
+Полнофункциональное REST API приложение для управления блогом, написанное на Java с использованием Spring Boot.
 
 ### Основной функционал
 
@@ -24,8 +24,13 @@
    spring:
      datasource:
        url: jdbc:postgresql://postgres-db:5432/blog_db
-       username: blog_user
-       password: blog_password
+       username: ${DB_USER}
+       password: ${DB_PASSWORD}
+   logging:
+     level:
+       root: INFO
+   server:
+     port: 8080
    ```
 
 3. **Отредактируйте файл `docker-compose.yml`**
@@ -33,43 +38,46 @@
    Пример конфигурации `docker-compose.yml`:
 ```yaml
 services:
-  spring-backend:
-    container_name: blog-backend
-    build: .
-    ports:
-      - "8080:8080"
-    restart: unless-stopped
-    depends_on:
-      - postgres-db
-    networks:
-      - blog-network
-    volumes:
-      - image-storage:/app/storage/images
+   spring-backend:
+      container_name: blog-backend
+      build: .
+      ports:
+         - "8080:8080"
+      restart: unless-stopped
+      depends_on:
+         - postgres-db
+      networks:
+         - blog-network
+      volumes:
+         - image-storage:/app/storage/images
+      environment:
+         - DB_USER=
+         - DB_PASSWORD=
 
-  postgres-db:
-    image: 'postgres:13.1-alpine'
-    container_name: blog-database
-    environment:
-      - POSTGRES_USER=blog_user
-      - POSTGRES_PASSWORD=blog_password
-      - POSTGRES_DB=blog_db
-    volumes:
-      - ./src/main/resources/db/postgre/db_init:/docker-entrypoint-initdb.d/
-      - postgres-data:/var/lib/postgres/data
-    ports:
-      - "5432:5432"
-    networks:
-      - blog-network
+   postgres-db:
+      image: 'postgres:13.1-alpine'
+      container_name: blog-database
+      environment:
+         - POSTGRES_USER=
+         - POSTGRES_PASSWORD=
+         - POSTGRES_DB=blog_db
+      volumes:
+         - ./src/main/resources/db/postgre/db_init:/docker-entrypoint-initdb.d/
+         - postgres-data:/var/lib/postgres/data
+      ports:
+         - "5432:5432"
+      networks:
+         - blog-network
 
 volumes:
-  image-storage:
-    name: "blog-image-storage"
-  postgres-data:
-    name: "blog-database"
+   image-storage:
+      name: "blog-image-storage"
+   postgres-data:
+      name: "blog-database"
 
 networks:
-  blog-network:
-    driver: bridge
+   blog-network:
+      driver: bridge
 ```
 
 4. **Запустите приложение**
@@ -81,6 +89,18 @@ networks:
 
    База данных PostgreSQL будет доступна по адресу `localhost:5432`
 
+5. **Запуск без Docker**
+
+   ```bash
+   # Собрать бэкенд (создать JAR файл)
+   ./gradlew clean build -x test
+   
+   # Запустить тесты
+   ./gradlew test
+   
+   # Запустить бэкенд
+   ./gradlew bootRun
+   ```
 ### API Endpoints
 
 ### Посты
